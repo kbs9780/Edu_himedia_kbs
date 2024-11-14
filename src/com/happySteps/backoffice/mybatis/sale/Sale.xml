@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.happySteps.backoffice.mybatis.sale.Sale">
+	
+	<update id="soldout" parameterType="saleDto">
+		UPDATE
+			TB_SLE
+		SET
+			CD_STATE_SALE	= 9
+			, DT_UPT		= SYSDATE
+			, UPDATER		= #{updater}
+		WHERE
+			SEQ_SLE		= #{seq_sle}
+	</update>
+	
+	<update id="re" parameterType="saleDto">
+		UPDATE
+			TB_SLE
+		SET
+			CD_STATE_SALE	= 1
+			, DT_UPT		= SYSDATE
+			, UPDATER		= #{updater}
+		WHERE
+			SEQ_SLE		= #{seq_sle}
+	</update>
+	
+	<update id="stop" parameterType="saleDto">
+		UPDATE
+			TB_SLE
+		SET
+			CD_STATE_SALE	= 2
+			, DT_UPT		= SYSDATE
+			, UPDATER		= #{updater}
+		WHERE
+			SEQ_SLE		= #{seq_sle}
+	</update>
+	
+	<update id="update" parameterType="saleDto">
+		UPDATE
+			TB_SLE
+		SET
+			SLE_NM			= #{sle_nm}
+			, DESCES 		= #{desces}
+			, SPECIES 		= #{species}
+			, PET_ITEMS 	= #{pet_items}
+			, PRICE_SALE	= #{price_sale}
+			, CD_STATE_SALE	= #{cd_state_sale}
+			, DT_SALE_START	= #{dt_sale_start}
+			, DT_SALE_END	= #{dt_sale_end}
+			, DT_REG		= SYSDATE
+			, UPDATER		= #{updater}
+		WHERE
+			SEQ_SLE		= #{seq_sle}
+	</update>
+	
+	<insert id="insert" parameterType="saleDto">
+		INSERT INTO TB_SLE
+			(SEQ_SLE, SEQ_PRD, SLE_NM, DESCES, SPECIES, PET_ITEMS, PRICE_SALE, CD_STATE_SALE, IMG, DT_SALE_START, DT_SALE_END, DT_REG, REGISTER)
+		VALUES
+			(#{seq_sle}, #{seq_prd}, #{sle_nm}, #{desces}, #{species}, #{pet_items}, #{price_sale}, #{cd_state_sale}, #{img}, #{dt_sale_start}, TO_DATE(#{dt_sale_end}, 'YYYY-MM-DD HH24:MI:SS'), SYSDATE, #{register})
+	</insert>
+	
+	<select id="listPrd" parameterType="productDto" resultType="saleDto">
+		SELECT
+			SEQ_PRD
+			, PRD_NM
+			, SPECIES
+			, PET_ITEMS
+			, PRICE_COST
+		FROM
+			TB_PRD	tb_prd
+		WHERE
+			CD_STATE_PRD	= 1
+			AND tb_prd.FLG_DELETE	= 'N'
+		ORDER BY	
+			DT_REG DESC
+	</select>
+	
+	<select id="select" parameterType="saleDto" resultType="saleDto">
+		SELECT
+			SEQ_SLE
+			, SLE_NM
+			, SPECIES
+			, PET_ITEMS
+			, DESCES
+			, PRICE_SALE
+			, CD_STATE_SALE
+			, IMG
+			, TO_CHAR(DT_SALE_START, 'YYYY-MM-DD')	dt_sale_start
+			, TO_CHAR(DT_SALE_END, 'YYYY-MM-DD')	dt_sale_end
+		FROM
+			TB_SLE
+		WHERE
+			SEQ_SLE = #{seq_sle}
+	</select>
+	
+	<select id="count" parameterType="pagingDto" resultType="java.lang.Integer">
+		SELECT
+			COUNT(ROWNUM)
+		FROM
+			TB_SLE
+			<include refid="where" />
+	</select>
+	
+	<select id="list" parameterType="pagingDto" resultType="saleDto">
+		SELECT
+			*
+		FROM
+			(
+			SELECT
+				/*+ first_rows(10) */ ROW_NUMBER() OVER (ORDER BY DT_REG DESC) rnum
+				, SEQ_SLE
+				, SLE_NM
+				, SPECIES
+				, PET_ITEMS
+				, DESCES
+				, CD_STATE_SALE
+				, PRICE_SALE
+				, TO_CHAR(DT_REG, 'YYYY-MM-DD') dt_reg
+			FROM
+				TB_SLE
+				<include refid="where" />
+			)
+		<![CDATA[
+		WHERE
+			rnum >= (${currentPage} - 1) * ${linePerPage} + 1 AND rnum <= ${currentPage} * ${linePerPage}
+		]]> 
+		ORDER BY
+			rnum
+	</select>
+	
+	<sql id="where">
+		WHERE 1=1
+		<if test="cd_state_sale != '0' and cd_state_sale != ''">
+			AND CD_STATE_SALE = #{cd_state_sale}
+		</if>
+		<if test="species != '0' and species != ''">
+			AND SPECIES = #{species}
+		</if>
+		<if test="searchWord != null and searchWord != ''">
+			<if test="searchKey == 'sle_nm'">
+				AND SLE_NM LIKE '%' || #{searchWord} || '%'
+			</if>
+		</if>
+	</sql>
+	
+	<select id="sequence" resultType="java.lang.Integer">
+		SELECT SQ_SEQ_SLE.NEXTVAL FROM DUAL
+	</select>
+	
+</mapper>

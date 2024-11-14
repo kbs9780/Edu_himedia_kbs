@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd 
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd">
+	
+	<annotation-driven />
+	
+	<aop:aspectj-autoproxy />
+	<beans:bean name="commonAop" class="com.happySteps.common.aop.CommonAop" />
+	
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- MAX Size: 10MB + 1Byte -->
+		<!-- <beans:property name="maxUploadSize" value="10485761" /> -->
+	</beans:bean>
+	
+	<beans:bean id="fileDownloadView" class="com.happySteps.common.view.FileDownloadView" />
+	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="1"/>
+	</beans:bean>
+	
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/view/" />
+		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="2" />
+	</beans:bean>
+	
+	<beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<beans:property name="objectMapper">
+			<beans:bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"/>
+		</beans:property>
+	</beans:bean>
+	
+	<context:component-scan base-package="com.happySteps" use-default-filters="false">
+		<context:include-filter type="regex" expression="com.happySteps..*Ctrl.*" />
+		<context:include-filter type="regex" expression="com.happySteps..*Api.*" />
+		<context:include-filter type="regex" expression="com.happySteps..*Web.*" />
+	</context:component-scan>
+	<!-- 
+	<mvc:interceptors>
+	<interceptor>
+			<mvc:mapping path="/front/**" />
+			<exclude-mapping path="/front/index.web" />
+			<exclude-mapping path="/front/member/registerForm.web" />
+			<exclude-mapping path="/front/member/registerProc.web" />
+			<exclude-mapping path="/front/member/confirmEmail.web" />
+			<exclude-mapping path="/front/login/loginForm.web" />
+			<exclude-mapping path="/front/login/loginProc.web" />
+			<exclude-mapping path="/front/login/logout.web" />
+			<exclude-mapping path="/front/**/*.json" />
+			<exclude-mapping path="/front/**/*.api" />
+			<beans:bean class="com.happySteps.front.common.interceptor.FrontItrc" >
+			</beans:bean>
+	</interceptor>
+	</mvc:interceptors>
+	 -->
+</beans:beans>

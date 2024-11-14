@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.happySteps.front.mybatis.basket.Basket">
+	
+	<select id="getSelectedItems" parameterType="map" resultType="basketDto">
+	SELECT 
+		* 
+	FROM
+		TB_BSK 
+	WHERE
+		SEQ_MBR = #{seq_mbr} 
+		AND SEQ_BSK 
+		IN 
+		<foreach item="item" collection="selectedItems" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 장바구니에 상품 추가 -->
+	<insert id="insert" parameterType="basketDto">
+		INSERT INTO TB_BSK
+			(SEQ_BSK, SEQ_MBR, SEQ_SLE, SEQ_PRD, SLE_NM, PRICE, COUNT, IMG, FLG_DELETE, DT_REG)
+		VALUES
+			(SQ_SEQ_BSK.NEXTVAL, #{seq_mbr}, #{seq_sle}, #{seq_prd}, #{sle_nm}, #{price}, #{count}, #{img}, 'N', SYSDATE)
+	</insert>
+	
+	<!-- 특정 회원의 장바구니 목록 가져오기 -->
+	<select id="listing" parameterType="java.lang.Integer" resultType="basketDto">
+		SELECT
+			SEQ_BSK,
+			SEQ_SLE,
+			SEQ_PRD,
+			SLE_NM,
+			PRICE,
+			COUNT,
+			IMG
+		FROM
+			TB_BSK
+		WHERE
+			SEQ_MBR = #{seq_mbr}
+			AND FLG_DELETE = 'N'
+	</select>
+	
+	<!-- 장바구니에서 상품 삭제 (실제 삭제) -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		DELETE FROM 
+			TB_BSK
+		WHERE 
+			SEQ_BSK = #{seq_bsk}
+	</delete>
+	
+	<!-- 장바구니에서 상품 수량 업데이트 -->
+	<update id="update" parameterType="basketDto">
+		UPDATE 
+			TB_BSK
+		SET 
+			COUNT = #{count}
+		WHERE 
+			SEQ_BSK = #{seq_bsk}
+	</update>
+
+	
+</mapper>

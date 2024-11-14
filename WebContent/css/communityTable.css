@@ -1,0 +1,75 @@
+@charset "UTF-8";
+
+/* 상단 헤더 테이블 */
+table.headTop_01 {
+	margin: 10px 10px;
+	border-collapse: collapse;
+	line-height: 1.5;
+	border: 1px solid #CCC; /* 외부 테두리 */
+	background-color: white;
+	border-radius: 10px; /* 둥근 모서리 추가 */
+	overflow: hidden; /* 둥근 모서리 효과를 위해 필요 */
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* 내부 그림자 효과 약하게 조정 */
+}
+
+table.headTop_01 th, table.headTop_01 td {
+	padding: 3px;
+	text-align: left;
+	border: 1px solid rgba(0, 0, 0, 0.1); /* 내부 경계선 추가 */
+	text-align: center;
+}
+
+table.headTop_01 th {
+	background-color: #F1E07D;
+	color: #000000;
+}
+
+/* 좌측 헤더 테이블 */
+table.headLeft_01 {
+	margin: 10px 10px;
+	border-collapse: collapse;
+	text-align: left;
+	line-height: 1.5;
+	border: 1px solid #ccc; /* 외부 테두리 */
+	border-radius: 10px; /* 둥근 모서리 추가 */
+	overflow: hidden; /* 둥근 모서리 효과를 위해 필요 */
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* 내부 그림자 효과 약하게 조정 */
+}
+
+table.headLeft_01 th {
+	padding: 3px;
+	font-weight: bold;
+	vertical-align: top;
+	color: #153d73;
+	border: 1px solid rgba(0, 0, 0, 0.1); /* 내부 경계선 추가 */
+}
+
+table.headLeft_01 td {
+	padding: 3px;
+	vertical-align: top;
+	border: 1px solid rgba(0, 0, 0, 0.1); /* 내부 경계선 추가 */
+}
+
+/* [20240710] 추가 */
+table.headLeft_01 td.content {
+	display: block; /* 동일 클래스로 인한 오류 수정을 위해 추가 */
+	height: 300px;
+	padding-right: 5px;
+	overflow-y: scroll;
+	overflow-wrap: anywhere;
+	
+	/* firefox - scrollbar style */
+	scrollbar-width: 3px;
+	scrollbar-color: #ccc;
+}
+
+/* chrome & edge & safari & opera - scrollbar style */
+table.headLeft_01 td.content::-webkit-scrollbar {
+	width: 3px;
+	transition: width 2s;
+}
+
+table.headLeft_01 td.content::-webkit-scrollbar-thumb {
+	background-color: #ccc;
+	border-radius: 5px;
+}

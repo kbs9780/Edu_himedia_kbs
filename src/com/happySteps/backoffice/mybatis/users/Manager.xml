@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.happySteps.backoffice.mybatis.users.Manager">
+	
+		<update id="update" parameterType ="managerDto">
+		UPDATE
+			TB_MNG
+		SET
+			CD_STATE	= #{cd_state}
+			<if test="phone != null and phone != ''">
+			, PHONE	= #{phone}
+			</if>
+			<if test="post != null and post != ''">
+			, POST		= #{post}
+			</if>
+			<if test="addr1 != null and addr1 != ''">
+			, ADDR1		= #{addr1}
+			</if>
+			<if test="addr2 != null and addr2 != ''">
+			, ADDR2		= #{addr2}
+			</if>
+			, DT_UPT	= SYSDATE
+			, UPDATER	= #{updater}
+		WHERE
+			SEQ_MNG = #{seq_mng}
+	</update>
+	
+	<select id="select" parameterType="managerDto" resultType="managerDto">
+		SELECT
+			SEQ_MNG
+			, ID
+			, NICKNAME
+			, EMAIL
+			, CD_STATE
+			, MNG_NM
+			, PHONE
+			, POST
+			, ADDR1
+			, ADDR2
+		FROM
+			TB_MNG
+		WHERE
+			SEQ_MNG = #{seq_mng}
+	</select>
+	
+	<select id="selectIdDuplicate" parameterType="managerDto" resultType="java.lang.Integer">
+		SELECT
+			COUNT(ID)
+		FROM
+			TB_MNG
+		WHERE
+			ID = #{id}
+	</select>
+	
+	<select id="selectNickDuplicate" parameterType="managerDto" resultType="java.lang.Integer">
+		SELECT
+			COUNT(NICKNAME)
+		FROM
+			TB_MNG
+		WHERE
+			NICKNAME = #{nickname}
+	</select>
+	
+	<select id="count" parameterType="pagingDto" resultType="java.lang.Integer">
+		SELECT
+			COUNT(ROWNUM)
+		FROM
+			TB_MNG
+		<include refid="where" />
+	</select>
+	
+	<select id="list" parameterType="pagingDto" resultType="managerDto">
+		SELECT
+			*
+		FROM
+			(
+			SELECT
+				/*+ first_rows(10) */ ROW_NUMBER() OVER (ORDER BY DT_REG DESC) rnum
+				, SEQ_MNG
+				, ID
+				, NICKNAME
+				, CD_STATE
+				, MNG_NM
+				, TO_CHAR(DT_REG, 'YYYY-MM-DD') dt_reg
+			FROM
+				TB_MNG
+			<include refid="where" />
+			)
+		<![CDATA[
+		WHERE
+			rnum >= (${currentPage} - 1) * ${linePerPage} + 1 AND rnum <= ${currentPage} * ${linePerPage}
+		]]> 
+		ORDER BY
+			rnum
+	</select>
+	
+	<sql id="where">
+		<where>
+			<if test="searchWord != null and searchWord != ''">
+				<if test="searchKey == 'mng_nm'">
+					AND MNG_NM = #{searchWord}
+				</if>
+				<if test="searchKey == 'id'">
+					AND ID = #{searchWord}
+				</if>
+			</if>
+		</where>
+	</sql>
+	
+	<insert id="insert" parameterType="managerDto">
+		INSERT INTO TB_MNG
+			(SEQ_MNG, ID, PASSWD, CD_STATE, MNG_NM, EMAIL, PHONE, POST, ADDR1, ADDR2, DT_REG, REGISTER, NICKNAME)
+		VALUES
+			(#{seq_mng}, #{id}, #{passwd}, 0, #{mng_nm}, #{email}, #{phone}, #{post}, #{addr1}, #{addr2}, SYSDATE, #{register}, #{nickname})
+	</insert>
+	
+	<select id="sequence" resultType="java.lang.Integer">
+		SELECT SQ_SEQ_MNG.NEXTVAL FROM DUAL
+	</select>
+	
+</mapper>

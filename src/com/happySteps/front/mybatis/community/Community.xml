@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.happySteps.front.mybatis.community.Community">
+	
+	<insert id="insertReply" parameterType="CommentDto">
+	INSERT INTO 
+		TB_CMT (SEQ_COMMENT,SEQ_COMMENT_PARENT, SEQ_MBR, SEQ_BBS, CONTENT, DEPTH, DT_REG, NICKNAME, FLG_DELETE, FLG_REPLY)
+		VALUES (SEQ_TB_CMT.NEXTVAL, #{seq_comment_parent}, #{seq_mbr}, #{seq_bbs}, #{content}, #{depth}, SYSDATE, #{nickname},'N','N')
+</insert>
+	<select id="selectComments" parameterType="int" resultType="CommentDto">
+	SELECT
+		SEQ_COMMENT,
+		SEQ_BBS,
+		CONTENT,
+		NICKNAME,
+		TO_CHAR(DT_REG, 'YYYY-MM-DD') AS dt_reg,
+		SEQ_COMMENT_PARENT,
+		DEPTH AS depth
+	FROM
+		TB_CMT
+	WHERE
+		SEQ_BBS = #{seq_bbs}
+	AND FLG_DELETE = 'N'
+	START WITH
+		SEQ_COMMENT_PARENT IS NULL
+	CONNECT BY
+		NOCYCLE
+		PRIOR SEQ_COMMENT = SEQ_COMMENT_PARENT
+		AND PRIOR SEQ_COMMENT != SEQ_COMMENT
+	ORDER BY
+		CASE WHEN DEPTH IS NULL THEN SEQ_COMMENT ELSE SEQ_COMMENT_PARENT END,
+		NVL(DEPTH, 0),
+		SEQ_COMMENT
+</select>
+<!-- 
+	<select id="selectComments" parameterType="int" resultType="CommentDto">
+	SELECT
+		SEQ_COMMENT,
+		SEQ_BBS,
+		CONTENT,
+		NICKNAME,
+		TO_CHAR(DT_REG, 'YYYY-MM-DD') AS dt_reg,
+		SEQ_COMMENT_PARENT,
+		DEPTH AS depth
+	FROM
+		TB_CMT
+	WHERE
+		SEQ_BBS = #{seq_bbs}
+		AND FLG_DELETE = 'N'
+	START WITH
+		SEQ_COMMENT_PARENT IS NULL
+	CONNECT BY
+		NOCYCLE
+		PRIOR SEQ_COMMENT = SEQ_COMMENT_PARENT
+		AND PRIOR SEQ_COMMENT != SEQ_COMMENT
+	ORDER SIBLINGS BY
+    	SEQ_COMMENT
+</select>
+ -->
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="int">
+		UPDATE 
+			TB_CMT
+		SET 
+			FLG_DELETE = 'Y'
+			, DT_UPT = SYSDATE
+	WHERE 
+		SEQ_COMMENT = #{seq_comment}
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateComment" parameterType="CommentDto">
+		UPDATE 
+			TB_CMT
+		SET 
+			CONTENT = #{content}
+			, DT_UPT = SYSDATE
+		WHERE 
+			SEQ_COMMENT = #{seq_comment}
+	</update>
+	
+	<!-- 댓글 등록 -->
+	<insert id="insertComment" parameterType="CommentDto">
+		INSERT INTO 
+			TB_CMT (SEQ_COMMENT, SEQ_BBS, CONTENT, DT_REG, FLG_REPLY, FLG_DELETE, SEQ_MBR, NICKNAME)
+		VALUES (SEQ_COMMENT.NEXTVAL, #{seq_bbs},#{content}, SYSDATE,'N','N', #{seq_mbr}, #{nickname})
+	</insert>
+	
+	<select id="getLikeCount" parameterType="int" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM 
+		TB_LKE
+	WHERE
+		SEQ_BBS = #{seq_bbs}
+		AND FLG_LKE = 'Y'
+	</select>
+	
+	<update id="removeLike" parameterType="LikeDto">
+	UPDATE 
+		TB_LKE
+	SET 
+		FLG_LKE = 'N'
+	WHERE
+		SEQ_BBS = #{seq_bbs} 
+		AND REGISTER = #{register}
+	</update>
+	
+	<insert id="addLike" parameterType="LikeDto">
+	INSERT INTO 
+		TB_LKE (SEQ_LKE, SEQ_BBS, REGISTER, DT_REG, FLG_LKE, SEQ_MBR,CD_CTG)
+	VALUES (SEQ_LKE.NEXTVAL, #{seq_bbs}, #{register}, SYSDATE, 'Y', #{seq_mbr}, #{cd_ctg})
+	</insert>
+	
+	<select id="isLiked" parameterType="LikeDto" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM 
+		TB_LKE
+	WHERE
+		SEQ_BBS = #{seq_bbs}
+		AND FLG_LKE = 'Y'
+	</select>	
+	
+	<select id="selectReply" parameterType="communityDto" resultType="communityDto">
+		SELECT
+			SEQ_BBS
+			, CONTENT
+			, FILE_SAVE
+			, FILE_ORIG
+			, TO_CHAR(DT_REG, 'YYYY-MM-DD') dt_reg
+		FROM
+			TB_BBS
+		WHERE
+			CD_BBS_TYPE			= #{cd_bbs_type}
+			AND SEQ_BBS_PARENT	= #{seq_bbs}
+	</select>
+		
+	<select id="allSelect" parameterType="CommunityDto" resultType="communityDto">
+		SELECT
+			SEQ_BBS,
+			TITLE,
+			CD_CTG,
+			CD_CTG_PET,
+			CONTENT,
+			TAG,
+			FILE_SAVE,
+			FILE_ORIG,
+			TO_CHAR(DT_REG, 'YYYY-MM-DD') AS dt_reg,
+			NICKNAME
+		FROM
+			TB_BBS 
+		WHERE
+			SEQ_BBS = #{seq_bbs}
+	</select>
+	
+	<select id="count" parameterType="pagingDto" resultType="java.lang.Integer">
+		SELECT
+			COUNT(ROWNUM)
+		FROM
+			TB_BBS
+		WHERE
+			<include refid="where" />
+	</select>
+	
+	<select id="count_all" parameterType="pagingDto" resultType="java.lang.Integer">
+		SELECT
+			COUNT(ROWNUM)
+		FROM
+			TB_BBS
+		WHERE
+			<include refid="all_where" />
+	</select>
+		<select id="writeForm" parameterType="pagingDto" resultType="communityDto">
+		SELECT
+			*
+		FROM
+			(
+			SELECT
+				/*+ first_rows(10) */ ROW_NUMBER() OVER (ORDER BY FLG_TOP, FLG_REPLY DESC, DT_REG DESC) rnum
+				, SEQ_BBS
+				, (SELECT tb_reply.SEQ_BBS FROM TB_BBS tb_reply WHERE tb_reply.SEQ_BBS_PARENT = TB_BBS.SEQ_BBS) seq_reply
+				, DECODE(CD_CTG_PET, 1, '강아지', 2, '고양이', 3, '햄스터', 4, '파충류 및 양서류', 5, '기타', '미정') CTG_NM
+				, TITLE
+				, FILE_ORIG
+				, DECODE(LOWER(SUBSTR(FILE_ORIG, INSTR(FILE_ORIG, '.', -1, 1) + 1))
+					, 'xlsx', 'xls'
+					, 'xls'	, 'xls'
+					, 'docx', 'doc'
+					, 'doc'	, 'doc'
+					, 'pptx', 'ppt'
+					, 'ppt'	, 'ppt'
+					, 'hwp'	, 'hwp'
+					, 'pdf'	, 'pdf'
+					, NULL	, ''
+					, 'etc') extension
+				, FLG_TOP
+				, TO_CHAR(DT_REG, 'YYYY-MM-DD') dt_reg
+			FROM
+				TB_BBS
+			WHERE
+				<include refid="where" />
+			)
+		<![CDATA[
+		WHERE
+			rnum >= (${currentPage} - 1) * ${linePerPage} + 1 AND rnum <= ${currentPage} * ${linePerPage}
+		]]> 
+		ORDER BY
+			FLG_TOP, rnum
+	</select>
+	
+	
+	<select id="popular_allList" parameterType="pagingDto" resultType="communityDto">
+		SELECT
+			*
+		FROM
+			(
+			SELECT
+				/*+ first_rows(10) */ ROW_NUMBER() OVER (ORDER BY l.like_count ASC, b.FLG_TOP,  b.FLG_REPLY DESC, b.DT_REG DESC) rnum
+				, b.SEQ_BBS
+				, (SELECT tb_reply.SEQ_BBS FROM TB_BBS tb_reply WHERE tb_reply.SEQ_BBS_PARENT = b.SEQ_BBS) seq_reply
+				, DECODE(b.CD_CTG_PET, 1, '강아지', 2, '고양이', 3, '햄스터', 4, '파충류 및 양서류', 5, '기타', '미정') CTG_NM
+				, b.TITLE
+				, b.FILE_ORIG
+				, DECODE(LOWER(SUBSTR(b.FILE_ORIG, INSTR(b.FILE_ORIG, '.', -1, 1) + 1))
+					, 'xlsx', 'xls'
+					, 'xls' , 'xls'
+					, 'docx', 'doc'
+					, 'doc' , 'doc'
+					, 'pptx', 'ppt'
+					, 'ppt' , 'ppt'
+					, 'hwp' , 'hwp'
+					, 'pdf' , 'pdf'
+					, NULL  , ''
+					, 'etc') extension
+				, b.FLG_TOP
+				, TO_CHAR(b.DT_REG, 'YYYY-MM-DD') dt_reg
+				, NVL(l.like_count, 0) AS like_count
+				, b.READED
+			FROM
+				TB_BBS b
+			LEFT JOIN 
+				(SELECT SEQ_BBS, COUNT(*) AS like_count FROM TB_LKE GROUP BY SEQ_BBS) l
+			ON b.SEQ_BBS = l.SEQ_BBS
+			WHERE
+				<include refid="all_where" />
+			)
+		<![CDATA[
+		WHERE
+			rnum >= (${currentPage} - 1) * ${linePerPage} + 1 AND rnum <= ${currentPage} * ${linePerPage}
+		]]> 
+		ORDER BY
+			FLG_TOP, rnum
+</select>
+	
+	<select id="allList" parameterType="pagingDto" resultType="communityDto">
+	   	SELECT
+				*
+			FROM
+				(
+				SELECT
+					/*+ first_rows(10) */ ROW_NUMBER() OVER (ORDER BY FLG_TOP, FLG_REPLY DESC, DT_REG DESC) rnum
+					, SEQ_BBS
+					, (SELECT tb_reply.SEQ_BBS FROM TB_BBS tb_reply WHERE tb_reply.SEQ_BBS_PARENT = TB_BBS.SEQ_BBS) seq_reply
+					, DECODE(CD_CTG_PET, 1, '강아지', 2, '고양이', 3, '햄스터', 4, '파충류 및 양서류', 5, '기타', '미정') CTG_NM
+					, TITLE
+					, FILE_ORIG
+					, DECODE(LOWER(SUBSTR(FILE_ORIG, INSTR(FILE_ORIG, '.', -1, 1) + 1))
+						, 'xlsx', 'xls'
+						, 'xls'	, 'xls'
+						, 'docx', 'doc'
+						, 'doc'	, 'doc'
+						, 'pptx', 'ppt'
+						, 'ppt'	, 'ppt'
+						, 'hwp'	, 'hwp'
+						, 'pdf'	, 'pdf'
+						, NULL	, ''
+						, 'etc') extension
+					, FLG_TOP
+					, TO_CHAR(DT_REG, 'YYYY-MM-DD') dt_reg
+					, READED
+				FROM
+					TB_BBS
+				WHERE
+					<include refid="all_where" />
+				)
+			<![CDATA[
+			WHERE
+				rnum >= (${currentPage} - 1) * ${linePerPage} + 1 AND rnum <= ${currentPage} * ${linePerPage}
+			]]> 
+			ORDER BY
+				FLG_TOP, rnum
+	</select>
+	
+	<select id="list" parameterType="pagingDto" resultType="communityDto">
+		SELECT
+			*
+		FROM
+			(
+			SELECT
+				/*+ first_rows(10) */ ROW_NUMBER() OVER (ORDER BY FLG_TOP, FLG_REPLY DESC, DT_REG DESC) rnum
+				, SEQ_BBS
+				, (SELECT tb_reply.SEQ_BBS FROM TB_BBS tb_reply WHERE tb_reply.SEQ_BBS_PARENT = TB_BBS.SEQ_BBS) seq_reply
+				, DECODE(CD_CTG_PET, 1, '강아지', 2, '고양이', 3, '햄스터', 4, '파충류 및 양서류', 5, '기타', '미정') CTG_NM
+				, TITLE
+				, NICKNAME
+				, TAG
+				, FILE_SAVE
+				, FILE_ORIG
+				, CD_CTG_PET
+				, DECODE(LOWER(SUBSTR(FILE_ORIG, INSTR(FILE_ORIG, '.', -1, 1) + 1))
+					, 'xlsx', 'xls'
+					, 'xls'	, 'xls'
+					, 'docx', 'doc'
+					, 'doc'	, 'doc'
+					, 'pptx', 'ppt'
+					, 'ppt'	, 'ppt'
+					, 'hwp'	, 'hwp'
+					, 'pdf'	, 'pdf'
+					, NULL	, ''
+					, 'etc') extension
+				, FLG_TOP
+				, TO_CHAR(DT_REG, 'YYYY-MM-DD') dt_reg
+				, READED
+			FROM
+				TB_BBS
+			WHERE
+				<include refid="where" />
+			)
+		<![CDATA[
+		WHERE
+			rnum >= (${currentPage} - 1) * ${linePerPage} + 1 AND rnum <= ${currentPage} * ${linePerPage}
+		]]> 
+		ORDER BY
+			FLG_TOP, rnum
+	</select>
+	
+	<sql id="where">
+			CD_BBS_TYPE = #{cd_bbs_type}
+			AND FLG_DELETE IS NULL
+			<if test="searchWord != null and searchWord != ''">
+				<if test="searchKey == 'title'">
+					AND TITLE LIKE '%' || #{searchWord} || '%'
+				</if>
+				<if test="searchKey == 'contents'">
+					AND CONTENT LIKE '%' || #{searchWord} || '%'
+				</if>
+				<if test="searchKey == 'title+contents'">
+					AND (TITLE LIKE '%' || #{searchWord} || '%' OR CONTENT LIKE '%' || #{searchWord} || '%')
+				</if>
+			</if>
+			<if test="cd_ctg != 0">
+				AND CD_CTG = 8
+			</if>
+	</sql>
+	
+	<sql id="all_where">
+		CD_BBS_TYPE IN (7, 9, 11)
+		AND FLG_DELETE IS NULL
+		<if test="searchWord != null and searchWord != ''">
+			<if test="searchKey == 'title'">
+				AND TITLE LIKE '%' || #{searchWord} || '%'
+			</if>
+			<if test="searchKey == 'contents'">
+				AND CONTENT LIKE '%' || #{searchWord} || '%'
+			</if>
+			<if test="searchKey == 'title+contents'">
+				AND (TITLE LIKE '%' || #{searchWord} || '%' OR CONTENT LIKE '%' || #{searchWord} || '%')
+			</if>
+		</if>
+		<if test="cd_ctg != 0">
+			AND CD_CTG = 8
+		</if>
+	</sql>
+	
+	<update id="deleteFlag" parameterType="CommunityDto">
+		UPDATE
+			TB_BBS
+		SET
+			FLG_DELETE	= 'Y'
+			, DT_UPT	= SYSDATE
+			, UPDATER	= #{updater}
+		WHERE
+			CD_BBS_TYPE = #{cd_bbs_type}
+			AND SEQ_BBS = #{seq_bbs}
+	</update>
+	
+	<delete id="delete" parameterType="CommunityDto">
+		DELETE FROM
+			TB_BBS
+		WHERE
+			CD_BBS_TYPE = #{cd_bbs_type}
+			AND SEQ_BBS = #{seq_bbs}
+	</delete>
+	
+	<insert id="insert" parameterType="CommunityDto">
+		INSERT INTO TB_BBS
+			(SEQ_BBS, CD_BBS_TYPE, TITLE, CD_CTG,CD_CTG_PET, CONTENT, NICKNAME, TAG, FILE_SAVE, FILE_ORIG, READED, DT_REG, REGISTER, SEQ_MBR)
+		VALUES
+			(#{seq_bbs}, #{cd_bbs_type}, #{title}, 8 ,#{cd_ctg_pet}, #{content},#{nickname},#{tag}, #{file_save}, #{file_orig}, 0, SYSDATE, #{register}, #{seq_mbr})
+	</insert>
+	
+	<update id="update" parameterType="CommunityDto">
+		UPDATE
+			TB_BBS
+		SET
+			TITLE			= #{title}
+			, CD_CTG		= #{cd_ctg}
+			, CD_CTG_PET	= #{cd_ctg_pet}
+			, CONTENT		= #{content}
+			, DT_UPT		= SYSDATE
+			, UPDATER		= #{updater}
+		WHERE
+			SEQ_BBS = #{seq_bbs}
+	</update>
+	
+	<select id="select" parameterType="CommunityDto" resultType="communityDto">
+		SELECT
+			SEQ_BBS,
+			TITLE,
+			CD_CTG,
+			CD_CTG_PET,
+			CONTENT,
+			TAG,
+			FILE_SAVE,
+			FILE_ORIG,
+			TO_CHAR(DT_REG, 'YYYY-MM-DD') AS dt_reg
+			,NICKNAME
+		FROM
+			TB_BBS 
+		WHERE
+			CD_BBS_TYPE = #{cd_bbs_type}
+			AND SEQ_BBS = #{seq_bbs}
+	</select>
+	
+	<select id="sequence" resultType="java.lang.Integer">
+		SELECT SQ_SEQ_BBS.NEXTVAL FROM DUAL
+	</select>
+	
+</mapper>

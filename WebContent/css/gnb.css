@@ -1,0 +1,23 @@
+@charset "UTF-8";
+	.gnb {
+		margin-top:15px;
+	}
+	.gnb ul {
+			list-style-type: none;
+			padding: 0;
+			margin: 0;
+		}
+		.gnb li {
+			display: inline;
+			margin-right: 15px;
+		}
+		.gnb a {
+			text-decoration: none;
+			color: #000;
+			padding: 10px 8px;
+			border-radius: 4px;
+			transition: background-color 0.3s;
+		}
+		.gnb a:hover {
+			background-color: #f5f5dc;
+		}

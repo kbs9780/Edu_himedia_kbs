@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.happySteps.front.mybatis.buy.Buy">
+	
+	<update id="goCancle" parameterType="buyDto">
+		UPDATE
+			TB_BUY_MST
+		SET
+			CD_STATE_DELIVERY	= 'R'
+			, DT_UPT			= SYSDATE
+			, UPDATER			= #{seq_mbr}
+		WHERE
+			SEQ_BUY_MST		= #{seq_buy_mst}
+	</update>
+	
+	<update id="goConfirm" parameterType="buyDto">
+		UPDATE
+			TB_BUY_DTL
+		SET
+			CD_STATE_BUY	= 'Y'
+		WHERE
+			SEQ_BUY_MST		= #{seq_buy_mst}
+	</update>
+	
+	<select id="selectTotal" parameterType="buyDto" resultType="java.lang.String">
+		SELECT
+			SUM(BUY_PRICE) total_price
+		FROM
+			TB_BUY_MST
+		WHERE
+			SEQ_MBR = #{seq_mbr}
+			AND tb_buy_mst.CD_STATE_PAY	= 'Y'
+	</select>
+	
+	<select id="list" parameterType="buyDto" resultType="buyDto">
+	SELECT 
+		mst.SEQ_MBR,
+		mst.SEQ_BUY_MST,
+		mst.BUY_INFO,
+		mst.BUY_PRICE,
+		mst.BUY_COUNT,
+		mst.CD_STATE_DELIVERY,
+		dtl.CD_STATE_BUY,
+		TO_CHAR(mst.DT_REG, 'YYYY-MM-DD') AS dt_reg
+	FROM 
+		TB_BUY_MST mst
+	LEFT JOIN (
+		SELECT 
+			SEQ_BUY_MST, 
+			CD_STATE_BUY,
+			ROW_NUMBER() OVER (PARTITION BY SEQ_BUY_MST ORDER BY DT_REG DESC) AS RN
+		FROM 
+			TB_BUY_DTL
+		) dtl ON mst.SEQ_BUY_MST = dtl.SEQ_BUY_MST AND dtl.RN = 1
+	WHERE
+		mst.SEQ_MBR = #{seq_mbr}
+		AND mst.CD_STATE_PAY = 'Y'
+	ORDER BY 
+		mst.SEQ_BUY_MST DESC
+	</select>
+	
+</mapper>

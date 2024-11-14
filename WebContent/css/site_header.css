@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+
+.submenu {
+			display: none;
+			position: absolute;
+			padding: 0;
+			list-style: none;
+			z-index: 1000;
+			white-space: nowrap; /* 항목이 세로로 쌓이지 않고 한 줄로 나열되도록 */
+		}
+		
+		/* 마우스를 올렸을 때 서브메뉴가 나타남 */
+		.nav-item:hover .submenu {
+			display: block;
+		}
+		
+		/* 부모 요소에 position: relative 설정 */
+		.nav-item {
+			position: relative;
+		}
+		
+		/* 서브메뉴 아이템 스타일 */
+		.submenu li {
+			display: inline-block; /* 항목을 가로로 나열 */
+			padding: 5px 10px;
+		}
+		
+		.submenu li a {
+			text-decoration: none;
+			color: black;
+		}
+		
+		.submenu li a:hover {
+			color: var(--accent-color);
+		}

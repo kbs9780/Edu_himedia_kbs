@@ -1,0 +1,749 @@
+/*
+Theme Name: Waggy
+Theme URI: https://templatesjungle.com/
+Author: TemplatesJungle
+Author URI: https://templatesjungle.com/
+Description: Waggy is specially designed product packaged for eCommerce pet store websites.
+Version: 1.1
+*/
+
+/*--------------------------------------------------------------
+This is main CSS file that contains custom style rules used in this template
+--------------------------------------------------------------*/
+
+/*------------------------------------*\
+    Table of contents
+\*------------------------------------*/
+
+/*------------------------------------------------
+
+CSS STRUCTURE:
+
+1. VARIABLES
+
+2. GENERAL TYPOGRAPHY
+  2.1 General Styles
+  2.2 Floating & Alignment
+  2.3 Forms
+  2.4 Lists
+  2.5 Code
+  2.6 Tables
+  2.7 Spacing
+  2.8 Utilities
+  2.9 Misc
+    - Row Border
+    - Zoom Effect
+  2.10 Buttons
+    - Button Sizes
+    - Button Shapes
+    - Button Color Scheme
+    - Button Aligns
+  2.11 Section
+    - Hero Section
+    - Section Title
+    - Section Paddings
+    - Section Margins
+    - Section Bg Colors
+    - Content Colors
+    - Content Borders
+
+3. EXTENDED TYPOGRAPHY
+  3.1 Blockquote / Pullquote
+  3.2 Text Highlights
+
+4. CONTENT ELEMENTS
+  4.1 Tabs
+  4.2 Accordions
+  4.3 Brand Carousel
+  4.4 Category Carousel
+
+5. BLOG STYLES
+  5.1 Blog Single Post
+  5.2 About Author
+  5.3 Comments List
+  5.4 Comments Form3
+
+6. SITE STRUCTURE
+  6.1 Header
+    - Header Menu
+    - Nav Sidebar
+  6.2 Billboard
+  6.3 About Us Section
+  6.4 Video Section
+  6.5 Selling Products Section
+  6.6 Quotation Section
+  6.7 Latest Blogs Section
+  6.8 Newsletter Section
+  6.9 Instagram Section
+  6.10 Footer
+    - Footer Top
+    - Footer Bottom
+
+7. OTHER PAGES
+  7.1 Product detail
+  7.2 Shop page
+[주석처리한 기존 템플릿 css]
+/*
+@font-face {
+    font-family: 'RixXladywatermelonR';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+    font-style: normal;
+	font-size: 20px;
+}
+*/
+    
+/*--------------------------------------------------------------
+/** 1. VARIABLES
+--------------------------------------------------------------*/
+#site-header {
+	font-family: 'RixXladywatermelonR';
+	src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+	font-style: normal;
+	font-size: 20px;
+}
+
+/*미디어 쿼리로상단을 반응형으로 하기 위한 css*/
+:root {
+  /* widths for rows and containers */
+  --header-height: 160px;
+  --header-height-min: 80px;
+}
+
+/* on mobile devices below 600px */
+@media screen and (max-width: 600px) {
+  :root {
+    --header-height: 100px;
+    --header-height-min: 80px;
+  }
+}
+
+/* 사이트 색의 전체적인 지정 */
+
+:root {
+  --accent-color: #DEAD6F;        /* 포인트 색상, 강조 색상 */
+  --dark-color: #222222;          /* 기본 어두운 색상 */
+  --light-dark-color: #727272;    /* 조금 더 밝은 어두운 색상 */
+  --light-color: #fff;            /* 흰색 */
+  --grey-color: #dbdbdb;          /* 회색 */
+  --light-grey-color: #fafafa;    /* 밝은 회색 */
+  --primary-color: #6995B1;       /* 기본 주요 색상 (블루 계열) */
+  --light-primary-color: #eef1f3; /* 밝은 주요 색상 (연한 블루) */
+}
+
+body {
+	/* 링크 색상 설정 */
+	--bs-link-color: #333;						/* 기본 링크 색상: 어두운 회색 */
+	--bs-link-hover-color: #333;				/* 링크에 마우스를 올렸을 때 색상: 어두운 회색 */
+
+	/* 링크 색상에 대한 RGB 값 설정 */
+	--bs-link-color-rgb: 40, 40, 40;         /* 링크 색상: RGB(40, 40, 40) */
+	--bs-link-hover-color-rgb: 0, 0, 0;      /* 링크 호버 색상: RGB(0, 0, 0) */
+
+	/* 주석 처리된 이전 링크 색상 설정 */
+	/* --bs-link-color: #DEAD6F;               강조된 링크 색상(이전 값) 
+	   --bs-link-hover-color: #DEAD6F;         강조된 링크 호버 색상(이전 값) */
+
+	/* 배경색에 대한 RGB 값 설정 */
+	--bs-light-rgb: 248, 248, 248;           /* 밝은 색상: RGB(248, 248, 248) */
+
+	/* 폰트 관련 설정 
+	--bs-font-sans-serif: 'Montserrat', cursive;  기본 sans-serif 폰트: Montserrat, 대체 폰트로 cursive 사용 
+	--bs-body-font-family: var(--bs-font-sans-serif); 기본 본문 폰트를 sans-serif로 설정 
+	--bs-body-font-size: 1rem;               본문 폰트 크기: 1rem
+	--bs-body-font-weight: 400;               본문 폰트 두께: 400 (보통 두께) 
+	--bs-body-line-height: 2;                 본문 줄 간격: 2 
+	--bs-body-color: #41403E;                 본문 텍스트 색상: 짙은 회색(#41403E) */
+
+	/* 주요 색상 관련 설정 */
+	--bs-primary: #DEAD6F;                   /* 주요 색상: 황갈색(#DEAD6F) */
+	--bs-primary-rgb: 222, 173, 111;         /* 주요 색상의 RGB 값: RGB(222, 173, 111) */
+	--bs-primary-bg-subtle: #FFF9EB;         /* 주요 배경 색상: 연한 베이지 (#FFF9EB) */
+	--bs-border-color: #F7F7F7;              /* 테두리 색상: 아주 연한 회색 (#F7F7F7) */
+
+	/* 상태에 따른 색상 설정 */
+	--bs-secondary-rgb: 230, 243, 251;       /* 보조 색상: 연한 파란색 RGB(230, 243, 251) */
+	--bs-success-rgb: 238, 245, 228;         /* 성공 상태 색상: 연한 녹색 RGB(238, 245, 228) */
+	--bs-danger-rgb: 249, 235, 231;          /* 위험 상태 색상: 연한 빨간색 RGB(249, 235, 231) */
+	--bs-warning-rgb: 255, 249, 235;         /* 경고 상태 색상: 연한 노란색 RGB(255, 249, 235) */
+	--bs-info-rgb: 230, 243, 250;            /* 정보 상태 색상: 연한 파란색 RGB(230, 243, 250) */
+}
+.btn-primary {
+	/* 버튼의 기본 패딩 설정 */
+	padding: 1.2rem 3rem;                        /* 위아래: 1.2rem, 좌우: 3rem */
+
+	/* 버튼 색상 관련 설정 */
+	--bs-btn-color: #fff;                        /* 버튼 텍스트 색상: 흰색 */
+	--bs-btn-bg: #DEAD6F;                        /* 버튼 배경 색상: 황갈색 (#DEAD6F) */
+	--bs-btn-border-color: transparent;           /* 버튼 테두리 색상: 투명 */
+
+	/* 버튼 호버 상태 색상 설정 */
+	--bs-btn-hover-color: #fff;                   /* 호버 상태 텍스트 색상: 흰색 */
+	--bs-btn-hover-bg: #e9b775;                   /* 호버 상태 배경 색상: 연한 황갈색 (#e9b775) */
+	--bs-btn-hover-border-color: transparent;      /* 호버 상태 테두리 색상: 투명 */
+
+	/* 버튼 포커스 상태 설정 */
+	--bs-btn-focus-shadow-rgb: 49, 132, 253;     /* 포커스 상태 그림자 색상: RGB(49, 132, 253) */
+
+	/* 버튼 활성 상태 색상 설정 */
+	--bs-btn-active-color: #fff;                  /* 활성 상태 텍스트 색상: 흰색 */
+	--bs-btn-active-bg: #DEAD6F;                  /* 활성 상태 배경 색상: 황갈색 (#DEAD6F) */
+	--bs-btn-active-border-color: transparent;     /* 활성 상태 테두리 색상: 투명 */
+	--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* 활성 상태 그림자 설정 */
+
+	/* 버튼 비활성 상태 색상 설정 */
+	--bs-btn-disabled-color: #fff;                /* 비활성 상태 텍스트 색상: 흰색 */
+	--bs-btn-disabled-bg: #d3d7dd;                /* 비활성 상태 배경 색상: 연한 회색 (#d3d7dd) */
+	--bs-btn-disabled-border-color: transparent;   /* 비활성 상태 테두리 색상: 투명 */
+}
+
+.btn-outline-primary {
+	/* 버튼의 전환 효과 설정 */
+	transition: all 0.3s ease-in;               /* 모든 속성에 대해 0.3초 동안 ease-in 효과 적용 */
+
+	/* 버튼 패딩 및 글자 간격 설정 */
+	padding: 1.2rem 3rem;                        /* 위아래: 1.2rem, 좌우: 3rem */
+	letter-spacing: 0.02375rem;                  /* 글자 간격: 0.02375rem */
+
+	/* 버튼 색상 관련 설정 */
+	--bs-btn-color: #DEAD6F;                     /* 기본 버튼 색상: 황갈색 (#DEAD6F) */
+	--bs-btn-border-color: #DEAD6F;              /* 버튼 테두리 색상: 황갈색 (#DEAD6F) */
+
+	/* 버튼 호버 상태 색상 설정 */
+	--bs-btn-hover-color: #fff;                   /* 호버 상태 텍스트 색상: 흰색 */
+	--bs-btn-hover-bg: #DEAD6F;                   /* 호버 상태 배경 색상: 황갈색 (#DEAD6F) */
+	--bs-btn-hover-border-color: #DEAD6F;         /* 호버 상태 테두리 색상: 황갈색 (#DEAD6F) */
+
+	/* 버튼 포커스 상태 설정 */
+	--bs-btn-focus-shadow-rgb: 13, 110, 253;     /* 포커스 상태 그림자 색상: RGB(13, 110, 253) */
+
+	/* 버튼 활성 상태 색상 설정 */
+	--bs-btn-active-color: #fff;                  /* 활성 상태 텍스트 색상: 흰색 */
+	--bs-btn-active-bg: #DEAD6F;                  /* 활성 상태 배경 색상: 황갈색 (#DEAD6F) */
+	--bs-btn-active-border-color: #DEAD6F;        /* 활성 상태 테두리 색상: 황갈색 (#DEAD6F) */
+	--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* 활성 상태 그림자 설정 */
+
+	/* 버튼 비활성 상태 색상 설정 */
+	--bs-btn-disabled-color: #DEAD6F;             /* 비활성 상태 텍스트 색상: 황갈색 (#DEAD6F) */
+	--bs-btn-disabled-bg: transparent;             /* 비활성 상태 배경 색상: 투명 */
+	--bs-btn-disabled-border-color: #DEAD6F;       /* 비활성 상태 테두리 색상: 황갈색 (#DEAD6F) */
+
+	/* 그라디언트 설정 */
+	--bs-gradient: none;                          /* 버튼 그라디언트: 없음 */
+}
+
+.btn-outline-dark {
+	/* 버튼의 전환 효과 설정 */
+	transition: all 0.3s ease-in;               /* 모든 속성에 대해 0.3초 동안 ease-in 효과 적용 */
+
+	/* 버튼 패딩 및 글자 간격 설정 */
+	padding: 1.2rem 3rem;                        /* 위아래: 1.2rem, 좌우: 3rem */
+	letter-spacing: 0.02375rem;                  /* 글자 간격: 0.02375rem */
+	text-transform: uppercase;                    /* 텍스트를 대문자로 변환 */
+
+	/* 버튼 색상 관련 설정 */
+	--bs-btn-color: #41403E;                     /* 기본 버튼 색상: 어두운 회색 (#41403E) */
+	--bs-btn-border-color: #41403E;              /* 버튼 테두리 색상: 어두운 회색 (#41403E) */
+
+	/* 버튼 호버 상태 색상 설정 */
+	--bs-btn-hover-color: #fff;                   /* 호버 상태 텍스트 색상: 흰색 */
+	--bs-btn-hover-bg: #41403E;                   /* 호버 상태 배경 색상: 어두운 회색 (#41403E) */
+	--bs-btn-hover-border-color: #41403E;         /* 호버 상태 테두리 색상: 어두운 회색 (#41403E) */
+
+	/* 버튼 포커스 상태 설정 */
+	--bs-btn-focus-shadow-rgb: 33, 37, 41;       /* 포커스 상태 그림자 색상: RGB(33, 37, 41) */
+
+	/* 버튼 활성 상태 색상 설정 */
+	--bs-btn-active-color: #fff;                  /* 활성 상태 텍스트 색상: 흰색 */
+	--bs-btn-active-bg: #41403E;                  /* 활성 상태 배경 색상: 어두운 회색 (#41403E) */
+	--bs-btn-active-border-color: #41403E;        /* 활성 상태 테두리 색상: 어두운 회색 (#41403E) */
+	--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* 활성 상태 그림자 설정 */
+
+	/* 버튼 비활성 상태 색상 설정 */
+	--bs-btn-disabled-color: #41403E;             /* 비활성 상태 텍스트 색상: 어두운 회색 (#41403E) */
+	--bs-btn-disabled-bg: transparent;             /* 비활성 상태 배경 색상: 투명 */
+	--bs-btn-disabled-border-color: #41403E;       /* 비활성 상태 테두리 색상: 어두운 회색 (#41403E) */
+
+	/* 그라디언트 설정 */
+	--bs-gradient: none;                          /* 버튼 그라디언트: 없음 */
+}
+
+.btn-dark {
+	/* 버튼 패딩 및 글꼴 크기 설정 */
+	padding: 1.2rem 3rem;                        /* 위아래: 1.2rem, 좌우: 3rem */
+	font-size: 1.1875rem;                        /* 글꼴 크기: 1.1875rem */
+	text-transform: uppercase;                    /* 텍스트를 대문자로 변환 */
+
+	/* 버튼 색상 관련 설정 */
+	--bs-btn-color: #fff;                         /* 기본 버튼 색상: 흰색 */
+	--bs-btn-bg: #41403E;                         /* 기본 버튼 배경 색상: 어두운 회색 (#41403E) */
+	--bs-btn-border-color: #41403E;              /* 버튼 테두리 색상: 어두운 회색 (#41403E) */
+
+	/* 버튼 호버 상태 색상 설정 */
+	--bs-btn-hover-color: #fff;                   /* 호버 상태 텍스트 색상: 흰색 */
+	--bs-btn-hover-bg: #363533;                   /* 호버 상태 배경 색상: 어두운 회색 (#363533) */
+	--bs-btn-hover-border-color: #363533;         /* 호버 상태 테두리 색상: 어두운 회색 (#363533) */
+
+	/* 버튼 포커스 상태 설정 */
+	--bs-btn-focus-shadow-rgb: 66, 70, 73;       /* 포커스 상태 그림자 색상: RGB(66, 70, 73) */
+
+	/* 버튼 활성 상태 색상 설정 */
+	--bs-btn-active-color: #fff;                  /* 활성 상태 텍스트 색상: 흰색 */
+	--bs-btn-active-bg: #41403E;                  /* 활성 상태 배경 색상: 어두운 회색 (#41403E) */
+	--bs-btn-active-border-color: #41403E;        /* 활성 상태 테두리 색상: 어두운 회색 (#41403E) */
+	--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* 활성 상태 그림자 설정 */
+
+	/* 버튼 비활성 상태 색상 설정 */
+	--bs-btn-disabled-color: #fff;                /* 비활성 상태 텍스트 색상: 흰색 */
+	--bs-btn-disabled-bg: #41403E;                /* 비활성 상태 배경 색상: 어두운 회색 (#41403E) */
+	--bs-btn-disabled-border-color: #41403E;      /* 비활성 상태 테두리 색상: 어두운 회색 (#41403E) */
+}
+
+@media screen and (max-width: 991px) {
+	/* 화면 너비가 991px 이하일 때 버튼의 패딩과 폰트 크기를 조정 */
+	.btn-primary,
+	.btn-outline-primary,
+	.btn-outline-dark,
+	.btn-dark {
+		padding: 0.6rem 1.5rem;   /* 위아래: 0.6rem, 좌우: 1.5rem */
+		font-size: 1rem;          /* 폰트 크기: 1rem */
+	}
+}
+
+body {
+	letter-spacing: 0.01625rem;  /* 기본 글자 간격 설정 */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	/* 제목 태그의 공통 스타일 설정 */
+	font-family: var(--heading-font);  /* 헤딩 폰트 설정 */
+	color: var(--bs-body-color);        /* 본문 색상 설정 */
+	font-weight: 400;                   /* 폰트 두께: 400 */
+	text-transform: capitalize;          /* 첫 글자 대문자 변환 */
+}
+
+a {
+	 text-decoration: none !important;                /* 링크의 밑줄 제거 */
+}
+
+.breadcrumb.text-white {
+	/* 브레드크럼의 색상 설정 */
+	--bs-breadcrumb-divider-color: #fff;                  /* 구분선 색상: 흰색 */
+	--bs-breadcrumb-item-active-color: var(--bs-primary); /* 활성화된 항목 색상: 기본 색상 */
+}
+
+.dropdown-menu {
+	/* 드롭다운 메뉴의 활성화된 링크 배경색 설정 */
+	--bs-dropdown-link-active-bg: var(--bs-primary); /* 활성화된 링크 배경색: 기본 색상 */
+}
+
+.secondary-font {
+	/* 보조 폰트 스타일 설정 */
+	font-family: var(--secondary-font); /* 보조 폰트 설정 */
+	font-weight: 300;                     /* 폰트 두께: 300 */
+}
+
+/*----------------------------------------------*/
+/* 6. SITE STRUCTURE */
+/*----------------------------------------------*/
+/* 6.1 Header
+--------------------------------------------------------------*/
+/* Preloader */
+/* .preloader-wrapper {
+	width: 100%;                      너비: 100%
+	height: 100vh;                   높이: 전체 화면 높이
+	margin: 0 auto;                  중앙 정렬을 위한 마진
+	position: absolute;               절대 위치 설정
+	top: 0;                          상단에 배치
+	left: 0;                         좌측에 배치
+	z-index: 111;                    겹침 순서 설정
+	background: #fff;                배경색: 흰색
+}
+
+.preloader-wrapper .preloader {
+	margin: 20% auto 0;              위쪽 여백: 20%, 중앙 정렬
+	transform: translateZ(0);        GPU 가속을 위한 변환
+}
+
+.preloader:before,
+.preloader:after {
+	content: '';                     가상 요소를 위한 내용
+	position: absolute;              절대 위치 설정
+	top: 0;                         상단에 배치
+}
+
+.preloader:before,
+.preloader:after,
+.preloader {
+	border-radius: 50%;              원형 모양 설정
+	width: 2em;                      너비: 2em
+	height: 2em;                     높이: 2em
+	animation: animation 1.2s infinite ease-in-out; 애니메이션 설정
+}
+
+.preloader {
+	animation-delay: -0.16s;         애니메이션 지연 설정
+}
+
+.preloader:before {
+	left: -3.5em;                    왼쪽 위치: -3.5em
+	animation-delay: -0.32s;         애니메이션 지연 설정
+}
+
+.preloader:after {
+	left: 3.5em;                     오른쪽 위치: 3.5em
+}
+
+@keyframes animation {
+	0%,
+	80%,
+	100% {
+		box-shadow: 0 2em 0 -1em var(--accent-color); 그림자 설정
+	}
+
+	40% {
+		box-shadow: 0 2em 0 0 var(--accent-color);   그림자 설정
+	}
+} */
+
+
+/* Search Bar Style
+.search-bar {
+	border: 1px solid #EAEAEA;        
+}
+
+.search-bar ::placeholder {
+	font-family: var(--secondary-font); 
+}
+
+.form-control:focus {
+	color: var(--bs-body-color);       
+	background-color: var(--bs-body-bg); 
+	border-color: #86b7fe;              
+	outline: 0;                         
+	box-shadow: none;                   
+}
+ */
+
+/* Nav Bar Style */
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link.show,
+.nav-link:focus,
+.nav-link:hover {
+	color: var(--accent-color);        /* 활성화된 링크 색상 */
+}
+
+
+/* Category Style * 아이콘파이 미사용/
+/* iconify-icon.category-icon {        */
+/*	color: #DEAD6F99;                  /* 카테고리 아이콘 색상 */
+	/* font-size: 100px;                  /* 카테고리 아이콘 크기 */
+	/* transition: all 0.3s ease-in;      /* 전환 효과 설정 */
+	/* }                                    */
+
+/* a.categories-item:hover iconify-icon.category-icon { */
+/*	color: #DEAD6F;                     /* 마우스 오버 시 아이콘 색상 */
+	/* }                                    */
+
+
+/* Banner Style */
+.swiper-pagination-bullet {
+	border: 1px solid var(--bs-body-color); /* 페이지네이션 총알 테두리 색상 */
+	background-color: transparent;          /* 페이지네이션 총알 배경색 */
+	opacity: 1;                             /* 불투명도 설정 */
+	width: var(--swiper-pagination-bullet-width, var(--swiper-pagination-bullet-size, 15px)); /* 페이지네이션 총알 너비 */
+	height: var(--swiper-pagination-bullet-height, var(--swiper-pagination-bullet-size, 15px)); /* 페이지네이션 총알 높이 */
+}
+
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+	background-color: var(--bs-body-color); /* 활성화된 페이지네이션 총알 배경색 */
+	background: var(--bs-body-color);         /* 활성화된 페이지네이션 총알 배경색 */
+}
+
+.swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
+.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
+	margin: 0 var(--swiper-pagination-bullet-horizontal-gap, 8px); /* 페이지네이션 총알 간격 설정 */
+}
+
+/* Pet 인기상품 */
+.card {
+	--bs-card-inner-border-radius: none; /* 카드 내부 테두리 반경 없음 */
+	--bs-card-bg: transparent;           /* 카드 배경 투명 */
+	background-color: transparent;        /* 카드 배경 투명 */
+	border: none !important;                        /* 카드 테두리 없음 */
+}
+
+a.btn-cart {
+	border-radius: 0.25rem;                /* 장바구니 버튼 모서리 둥글게 */
+	border: 1px solid rgba(65, 64, 62, 0.20); /* 장바구니 버튼 테두리 색상 */
+}
+
+a.btn-wishlist {
+	border-radius: 0.25rem;                /* 위시리스트 버튼 모서리 둥글게 */
+	border: 1px solid rgba(65, 64, 62, 0.20); /* 위시리스트 버튼 테두리 색상 */
+}
+
+
+/* Pet Popular Products Style */
+button.filter-button {
+	letter-spacing: 0.02125rem;         /* 글자 간격 설정 */
+	border: none;                       /* 버튼 테두리 없음 */
+	border-bottom: 2px solid #D9D9D8;  /* 버튼 하단 테두리 색상 */
+	background: transparent;           /* 버튼 배경 투명 */
+	text-transform: uppercase;          /* 텍스트 대문자 변환 */
+	font-size: 1.0625rem;              /* 버튼 폰트 크기 */
+	transition: all 0.3s ease-in;      /* 전환 효과 설정 */
+}
+
+button.filter-button.active,
+button.filter-button:hover {
+	border-bottom: 2px solid #DEAD6F;  /* 활성화 또는 마우스 오버 시 하단 테두리 색상 변경 */
+}
+
+/* Testimonial Style */
+.testimonial-content {
+	color: #908F8D;                     /* 리뷰 내용 텍스트 색상 */
+}
+
+/* 아이콘파이 관련 CSS 주석 처리 */
+ /* iconify-icon.quote-icon {           */
+/*	color: #F7EEE4;                    /* 인용 아이콘 색상 */
+/*	font-size: 14rem;                  /* 인용 아이콘 크기 */
+/* }                                    */
+
+
+/* Register Form 
+.form-control {
+	color: #908F8D;                         
+	line-height: normal;                    
+	letter-spacing: 0.02125rem;             
+	text-transform: capitalize;             
+	border-radius: 0.25rem;                  
+	border: 1px solid rgba(65, 64, 62, 0.20); 
+	background: #FFF;                      
+	display: flex;                        
+	padding: 1.25rem 0rem 1.25rem 1.25rem;   
+	align-items: center;                     
+	gap: 0.375rem;                           
+	align-self: stretch;                    
+}*/
+.form-control:focus {
+	border-color: #41403E;                   /* 포커스 시 테두리 색상 변경 */
+}
+
+/* blog style */
+.blog-paragraph {
+  color: #908F8D;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
+  font-family: var(--secondary-font);
+}
+
+.blog-read {
+  color: #908F8D;
+  font-size: 1rem;
+  letter-spacing: 0.02rem;
+  text-transform: uppercase;
+}
+
+a.blog-read {
+  border-bottom: 3px solid #D9D9D8;
+  transition: all 0.3s ease-in;
+}
+
+a.blog-read:hover {
+  border-bottom: 3px solid #8a8a8a;
+}
+
+/* services style  */
+.service-icon {
+  font-size: 30px;
+  border-radius: 3.125rem;
+  border: 1px solid #D9D9D8;
+  padding: 1.25rem;
+}
+
+/* insta style  */
+.instagram-item:hover:before,
+.instagram-item:hover .icon-overlay {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.icon-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  align-items: center;
+  font-size: 3rem;
+  cursor: pointer;
+  opacity: 0;
+  -moz-transition: 0.8s ease;
+  -webkit-transition: 0.8s ease;
+  transition: 0.8s ease;
+}
+
+/* footer style */
+/* iconify-icon.social-icon {   // 아이콘파이 관련 CSS 주석 처리
+  color: #CACACA;
+  font-size: 1.125rem;
+  padding: 0.75rem;
+  border-radius: 4.375rem;
+  border: 1px solid #D9D9D8;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.03);
+  transition: all 0.5s ease;
+}
+
+li.social:hover iconify-icon.social-icon {   // 아이콘파이 관련 CSS 주석 처리
+  color: #FFF;
+  border: 1px solid #DEAD6F;
+  background: #DEAD6F;
+}
+
+iconify-icon.send-icon {   // 아이콘파이 관련 CSS 주석 처리
+  cursor: pointer;
+  font-size: 1.125rem;
+  padding: 0.75rem;
+  border-radius: 4.375rem;
+  color: #FFF;
+  border: 1px solid #DEAD6F;
+  background: #DEAD6F;
+} */
+.social-icons {
+    display: flex;  /* 아이콘을 가로로 배치 */
+    justify-content: center;  /* 중앙 정렬 */
+    list-style: none;  /* 기본 리스트 스타일 제거 */
+    padding: 0;  /* 기본 패딩 제거 */
+}
+
+.social-icons li {
+    margin: 0 10px;  /* 아이콘 간의 간격 설정 */
+}
+
+.social-icon {
+    width: 30px;  /* 아이콘의 너비 */
+    height: 30px;  /* 아이콘의 높이 */
+    transition: transform 0.3s;  /* 호버 효과 시 전환 설정 */
+}
+
+.social-icons li:hover .social-icon {
+    transform: scale(1.1);  /* 호버 시 아이콘 확대 효과 */
+}
+@media screen and (max-width: 991px) {
+
+  /* offcanvas menu */
+  .offcanvas-body .nav-item {
+    font-weight: 700;
+    border-bottom: 1px solid #d1d1d1;
+  }
+
+  .offcanvas-body .filter-categories {
+    width: 100%;
+    margin-bottom: 20px !important;
+    border: 1px solid #d1d1d1 !important;
+    padding: 14px;
+    border-radius: 8px;
+  }
+
+  /* dropdown-menu */
+  .dropdown-menu {
+    padding: 0;
+    border: none;
+    line-height: 1.4;
+    font-size: 0.9em;
+  }
+
+  .dropdown-menu a {
+    padding-left: 0;
+  }
+
+  .dropdown-toggle::after {
+    position: absolute;
+    right: 0;
+    top: 21px;
+  }
+}
+
+/*-------------------------------------------------------------- 
+faqs section style start 
+--------------------------------------------------------------*/
+.accordion-button:not(.collapsed) {
+  color: var(--body-text-color);
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.accordion {
+  --bs-accordion-color: var(--light-text-color);
+  --bs-accordion-bg: none;
+  --bs-accordion-btn-color: var(--body-text-color);
+}
+
+/* .accordion-button:not(.collapsed)::after {   // 아이콘파이 관련 CSS 주석 처리
+  background-image: url('https://api.iconify.design/eva/arrow-down-fill.svg?color=%2341403e');
+} */
+
+.accordion-button::after {
+  /* background-image: url('https://api.iconify.design/eva/arrow-down-fill.svg?color=%2341403e'); */ /* 아이콘파이 관련 CSS 주석 처리 */
+}
+
+.accordion-button:focus {
+  z-index: 3;
+  border-color: none;
+  box-shadow: none;
+}
+
+/*-------------------------------------------------------------- 
+Account section style start 
+--------------------------------------------------------------*/
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  color: var(--accent-color);
+}
+
+/*-------------------------------------------------------------- 
+Blog section style start 
+--------------------------------------------------------------*/
+/* ------ Pagination ------*/
+.pagination .page-numbers {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  color: var(--bs-body-color);
+  padding: 0 10px;
+  line-height: 1.4;
+  transition: 0.9s all;
+  border-radius: 8px;
+}
+
+.pagination .page-numbers:hover,
+.pagination .page-numbers.current {
+  color: var(--accent-color);
+}
+
+/* iconify-icon.pagination-arrow {   // 아이콘파이 관련 CSS 주석 처리
+  color: var(--bs-body-color);
+  transition: 0.9s all;
+}
+
+iconify-icon.pagination-arrow:hover {   // 아이콘파이 관련 CSS 주석 처리
+  color: var(--accent-color);
+} */
+
+/*-------------------------------------------------------------- 
+Single Product section style start 
+--------------------------------------------------------------*/
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+  color: var(--light-color);
+  background-color: var(--accent-color);
+}

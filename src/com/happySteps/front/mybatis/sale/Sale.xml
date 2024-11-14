@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.happySteps.front.mybatis.sale.Sale">
+
+		<select id="randomDog" parameterType="pagingDto" resultType="saleDto">
+			SELECT 
+				*
+			FROM (
+				SELECT 
+					ROW_NUMBER() OVER (ORDER BY DBMS_RANDOM.VALUE) rnum
+					,SEQ_SLE
+					,SLE_NM
+					,SPECIES
+					,IMG
+					,PRICE_SALE
+				FROM 
+					TB_SLE
+				WHERE 
+					CD_STATE_SALE = 1
+					AND SPECIES = 1
+				) 
+			<![CDATA[
+			WHERE 
+				rnum <= 2
+			]]>
+		</select>
+		
+		<select id="randomCat" parameterType="pagingDto" resultType="saleDto">
+			SELECT 
+				*
+			FROM (
+				SELECT 
+					ROW_NUMBER() OVER (ORDER BY DBMS_RANDOM.VALUE) rnum,
+					SEQ_SLE,
+					SLE_NM,
+					SPECIES,
+					IMG,
+					PRICE_SALE
+				FROM 
+					TB_SLE
+				WHERE 
+					CD_STATE_SALE = 1
+					AND SPECIES = 2
+				) 
+			<![CDATA[
+			WHERE 
+				rnum <= 2
+			]]>
+		</select>
+		
+		<select id="randomHamster" parameterType="pagingDto" resultType="saleDto">
+			SELECT 
+				*
+			FROM (
+				SELECT 
+					ROW_NUMBER() OVER (ORDER BY DBMS_RANDOM.VALUE) rnum,
+					SEQ_SLE,
+					SLE_NM,
+					SPECIES,
+					IMG,
+					PRICE_SALE
+				FROM 
+					TB_SLE
+				WHERE 
+					CD_STATE_SALE = 1
+					AND SPECIES = 3
+				) 
+			<![CDATA[
+			WHERE 
+				rnum <= 2
+			]]>
+		</select>
+		
+		<select id="randomReptile" parameterType="pagingDto" resultType="saleDto">
+			SELECT 
+				*
+			FROM (
+				SELECT 
+					ROW_NUMBER() OVER (ORDER BY DBMS_RANDOM.VALUE) rnum,
+					SEQ_SLE,
+					SLE_NM,
+					SPECIES,
+					IMG,
+					PRICE_SALE
+				FROM 
+					TB_SLE
+				WHERE 
+					CD_STATE_SALE = 1
+					AND SPECIES = 4
+				) 
+			<![CDATA[
+			WHERE 
+				rnum <= 2
+			]]>
+		</select>
+		
+
+		<select id="randomList2" parameterType="pagingDto" resultType="saleDto">
+		SELECT
+			*
+		FROM (
+			SELECT 
+				ROW_NUMBER() OVER (ORDER BY DBMS_RANDOM.VALUE) rnum
+				, SEQ_SLE
+				, SLE_NM
+				, IMG
+				, PRICE_SALE
+			FROM
+				TB_SLE
+			WHERE
+				CD_STATE_SALE = 1
+		)
+		<![CDATA[
+		WHERE rnum <= 5
+		]]>
+	</select>
+	
+	<select id="randomList" parameterType="pagingDto" resultType="saleDto">
+		SELECT
+			*
+		FROM (
+			SELECT 
+				ROW_NUMBER() OVER (ORDER BY DBMS_RANDOM.VALUE) rnum
+				, SEQ_SLE
+				, SLE_NM
+				, IMG
+				, PRICE_SALE
+			FROM
+				TB_SLE
+			WHERE
+				CD_STATE_SALE = 1
+		)
+		<![CDATA[
+		WHERE rnum <= 5
+		]]>
+	</select>
+
+	<select id="count" parameterType="pagingDto" resultType="java.lang.Integer">
+		SELECT
+			COUNT(ROWNUM)
+		FROM
+			TB_SLE
+		WHERE
+			CD_STATE_SALE = 1
+			<include refid="where" />
+	</select>
+	
+	<select id="list" parameterType="pagingDto" resultType="saleDto">
+		SELECT
+			*
+		FROM
+			(
+			SELECT
+				/*+ first_rows(10) */ ROW_NUMBER() OVER (ORDER BY DT_REG DESC) rnum
+				, SEQ_SLE
+				, SLE_NM
+				, IMG
+				, DESCES
+				, DESCES_IMG
+				, CD_STATE_SALE
+				, PRICE_SALE
+				, TO_CHAR(DT_REG, 'YYYY-MM-DD') dt_reg
+			FROM
+				TB_SLE
+			WHERE
+				CD_STATE_SALE = 1
+				<include refid="where" />
+			)
+		<![CDATA[
+		WHERE
+			rnum >= (${currentPage} - 1) * ${linePerPage} + 1 AND rnum <= ${currentPage} * ${linePerPage}
+		]]>
+		ORDER BY
+			rnum
+	</select>
+	<sql id="where">
+		<if test="cd_ctg_pet != null and cd_ctg_pet != 0">
+			AND CD_CTG_PET = #{cd_ctg_pet}
+		</if>
+		<if test="pet_items != null and pet_items != 0">
+			AND PET_ITEMS = #{pet_items}
+		</if>
+		<if test="species != null and species != 0">
+			AND SPECIES = #{species}
+		</if>
+		<if test="searchWord != null and searchWord != ''">
+			<if test="searchKey == 'sle_nm'">
+				AND SLE_NM LIKE '%' || #{searchWord} || '%'
+			</if>
+			<if test="searchKey == 'desces'">
+				AND DESCES LIKE '%' || #{searchWord} || '%'
+			</if>
+			<if test="searchKey == 'sle_nm+desces'">
+				AND (SLE_NM LIKE '%' || #{searchWord} || '%' OR DESCES LIKE '%' || #{searchWord} || '%')
+			</if>
+		</if>
+	</sql>
+	
+	<select id="select" parameterType="saleDto" resultType="saleDto">
+		SELECT
+			SEQ_SLE
+			, SEQ_PRD
+			, CD_CTG_PET
+			, SLE_NM
+			, PRICE_SALE
+			, IMG
+			, DESCES
+			, DESCES_IMG
+		FROM
+			TB_SLE
+		WHERE
+			SEQ_SLE				= #{seq_sle}
+			AND CD_STATE_SALE	= 1
+			<![CDATA[
+			AND SYSDATE >= DT_SALE_START AND SYSDATE <= DT_SALE_END
+			]]>
+	</select>
+	
+	<select id="sequence" resultType="java.lang.Integer">
+		SELECT SQ_SEQ_SLE.NEXTVAL FROM DUAL
+	</select>
+	
+</mapper>

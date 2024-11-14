@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+	<typeAliases>
+	<typeAlias type="com.happySteps.front.login.dto.LoginDto"				alias="loginDto" />
+	<typeAlias type="com.happySteps.front.member.dto.MemberDto"				alias="memberDto" />
+	<typeAlias type="com.happySteps.front.member.dto.TermAgreeDto"			alias="termagreeDto" />
+	<typeAlias type="com.happySteps.front.member.dto.StatisticMemberDto"	alias="statisticmemberDto" />
+	<typeAlias type="com.happySteps.front.buy.dto.BuyMasterDto"				alias="buymasterDto" />
+	<typeAlias type="com.happySteps.front.buy.dto.BuyDto"					alias="buyDto" />
+	<typeAlias type="com.happySteps.front.buy.dto.BuyDetailDto"				alias="buydetailDto" />
+	<typeAlias type="com.happySteps.front.buy.dto.BuyDetailListDto"			alias="buydetaillistDto" />
+	<typeAlias type="com.happySteps.front.center.dto.BoardDto"				alias="boardDto" />
+	<typeAlias type="com.happySteps.front.basket.dto.BasketDto"				alias="basketDto" />
+	<typeAlias type="com.happySteps.front.community.dto.CommunityDto"		alias="communityDto" />
+	<typeAlias type="com.happySteps.front.common.dto.PagingDto"				alias="pagingDto" />
+	<typeAlias type="com.happySteps.front.sale.dto.SaleDto"					alias="saleDto" />
+	<typeAlias type="com.happySteps.front.like.dto.LikeDto"					alias="LikeDto" />
+	<typeAlias type="com.happySteps.front.comment.dto.CommentDto"			alias="CommentDto" />
+	<typeAlias type="com.happySteps.front.comment.dto.CommentListDto"		alias="CommentListDto" />
+	<typeAlias type="com.happySteps.front.pay.dto.PayDto"					alias="payDto" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="com/happySteps/front/mybatis/login/Login.xml" />
+		<mapper resource="com/happySteps/front/mybatis/member/Member.xml" />
+		<mapper resource="com/happySteps/front/mybatis/member/TermAgree.xml" />
+		<mapper resource="com/happySteps/front/mybatis/member/StatisticMember.xml" />
+		<mapper resource="com/happySteps/front/mybatis/buy/Buy.xml" />
+		<mapper resource="com/happySteps/front/mybatis/buy/BuyDetail.xml" />
+		<mapper resource="com/happySteps/front/mybatis/buy/BuyMaster.xml" />
+		<mapper resource="com/happySteps/front/mybatis/center/Board.xml" />
+		<mapper resource="com/happySteps/front/mybatis/basket/Basket.xml" />
+		<mapper resource="com/happySteps/front/mybatis/sale/Sale.xml" />
+		<mapper resource="com/happySteps/front/mybatis/community/Community.xml" />
+		<mapper resource="com/happySteps/front/mybatis/pay/Pay.xml" />
+	</mappers>
+</configuration>

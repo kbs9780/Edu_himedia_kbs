@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.happySteps.backoffice.mybatis.product.Product">
+	
+	<update id="update" parameterType="productDto">
+		UPDATE 
+			TB_PRD
+		SET
+			DT_UPT = SYSDATE
+			, UPDATER = #{register}
+			<if test="prd_nm != null and prd_nm != ''">
+			, PRD_NM = #{prd_nm}
+			</if>
+			<if test="species != null and species != ''">
+			, SPECIES = #{species}
+			</if>
+			<if test="pet_items != null and species != ''">
+			, PET_ITEMS = #{pet_items}
+			</if>
+			<if test="price_cost != null and price_cost != ''">
+			, PRICE_COST = #{price_cost}
+			</if>
+			<if test="count_stock != null and count_stock != ''">
+			, COUNT_STOCK = #{count_stock}
+			</if>
+			<if test="cd_state_prd != null and cd_state_prd != 0">
+			, CD_STATE_PRD = #{cd_state_prd}
+			</if>
+		WHERE
+			SEQ_PRD = #{seq_prd}
+	</update>
+	
+	<select id="select" parameterType="productDto" resultType="productDto">
+		SELECT
+			SEQ_PRD
+			, PRD_NM
+			, SPECIES
+			, PET_ITEMS
+			, PRICE_COST
+			, COUNT_STOCK
+			, CD_STATE_PRD
+			, FLG_DELETE
+			, TO_CHAR(DT_REG, 'YYYY-MM-DD') DT_REG
+			, TO_CHAR(DT_UPT, 'YYYY-MM-DD') DT_UPT
+		FROM
+			TB_PRD
+		WHERE
+			SEQ_PRD = #{seq_prd}
+	</select>
+	
+	<update id="deleteFlag" parameterType="productDto">
+		UPDATE
+			TB_PRD
+		SET
+			FLG_DELETE		= 'Y'
+			, CD_STATE_PRD	= '2'
+			, DT_UPT		= SYSDATE
+			, UPDATER		= #{updater}
+		WHERE
+			SEQ_PRD = #{seq_prd}
+		
+	</update>
+	
+	
+	<insert id="insert" parameterType="productDto">
+		INSERT INTO TB_PRD
+			(SEQ_PRD, PRD_NM, SPECIES, PET_ITEMS, PRICE_COST, COUNT_STOCK, FLG_DELETE, CD_STATE_PRD, DT_REG, REGISTER)
+		VALUES
+			(#{seq_prd}, #{prd_nm}, #{species}, #{pet_items}, #{price_cost}, #{count_stock}, 'N', #{cd_state_prd}, SYSDATE, #{register})
+	</insert>
+	
+	<select id="count" parameterType="pagingDto" resultType="java.lang.Integer">
+		SELECT
+			COUNT(ROWNUM)
+		FROM
+			TB_PRD
+		WHERE
+			<include refid="where" />
+	</select>
+	
+	<select id="list" parameterType="pagingDto" resultType="productDto">
+		SELECT
+			*
+		FROM
+			(
+			SELECT
+				/*+ first_rows(10) */ ROW_NUMBER() OVER (ORDER BY DT_REG DESC) rnum
+				, SEQ_PRD
+				, PRD_NM
+				, CD_STATE_PRD
+				, SPECIES
+				, PET_ITEMS
+				, PRICE_COST
+				, COUNT_STOCK
+				, TO_CHAR(DT_REG, 'YYYY-MM-DD') dt_reg
+			FROM
+				TB_PRD
+			WHERE
+				<include refid="where" />
+			)
+		<![CDATA[
+		WHERE
+			rnum >= (${currentPage} - 1) * ${linePerPage} + 1 AND rnum <= ${currentPage} * ${linePerPage}
+		]]>
+		ORDER BY
+			rnum
+	</select>
+	
+	<sql id="where">
+		FLG_DELETE	='N'
+		<if test="cd_state_prd != '0' and cd_state_prd != ''">
+			AND CD_STATE_PRD = #{cd_state_prd}
+		</if>
+		<if test="species != '0' and species != ''">
+			AND SPECIES = #{species}
+		</if>
+		<if test="searchWord != null and searchWord != ''">
+			<if test="searchKey == 'prd_nm'">
+				AND PRD_NM LIKE '%' || #{searchWord} || '%'
+			</if>
+		</if>
+	</sql>
+	
+	<select id="sequence" resultType="java.lang.Integer">
+		SELECT SQ_SEQ_PRD.NEXTVAL FROM DUAL
+	</select>
+	
+</mapper>

@@ -1,0 +1,44 @@
+@charset "UTF-8";	
+
+body {
+	margin: 0;
+	padding: 20px;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+li {
+	margin: 10px 0;
+}
+
+.menuLnb {
+	display: block;
+	width: 200px; /* 메뉴바의 넓이 지정 */
+	padding: 15px 20px;
+	background-color: #F9F3EC;
+	color: #333333;
+	text-decoration: none;
+	border: 1px solid #dddddd;
+	border-radius: 8px;
+	transition: background-color 0.3s, color 0.3s, transform 0.3s;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.menuLnb:hover {
+	background-color: #f5f5dc;
+	color: #333333; /* 호버 시 글자 색상을 검정색으로 변경 */
+	transform: translateY(-2px);
+}
+
+.menuLnb:active {
+	transform: translateY(0);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.menu-title {
+	font-weight: 600;
+	font-size: 16px;
+}
